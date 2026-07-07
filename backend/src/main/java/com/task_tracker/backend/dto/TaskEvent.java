@@ -6,6 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class TaskEvent {
-    private String type;       // "CREATED", "UPDATED", "DELETED"
-    private TaskResponse task;
+  private String type; // "CREATED", "UPDATED", "DELETED"
+  private TaskResponse task;
 }

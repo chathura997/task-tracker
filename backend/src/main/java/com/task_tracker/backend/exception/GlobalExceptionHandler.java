@@ -1,5 +1,8 @@
 package com.task_tracker.backend.exception;
 
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -7,67 +10,63 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
-
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, Object>> handleValidation(MethodArgumentNotValidException ex) {
-        Map<String, String> fieldErrors = new HashMap<>();
-        ex.getBindingResult().getFieldErrors().forEach(error ->
-                fieldErrors.put(error.getField(), error.getDefaultMessage())
-        );
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public ResponseEntity<Map<String, Object>> handleValidation(MethodArgumentNotValidException ex) {
+    Map<String, String> fieldErrors = new HashMap<>();
+    ex.getBindingResult()
+        .getFieldErrors()
+        .forEach(error -> fieldErrors.put(error.getField(), error.getDefaultMessage()));
 
-        Map<String, Object> body = buildBody(HttpStatus.BAD_REQUEST, "Validation failed");
-        body.put("errors", fieldErrors);
-        return ResponseEntity.badRequest().body(body);
-    }
+    Map<String, Object> body = buildBody(HttpStatus.BAD_REQUEST, "Validation failed");
+    body.put("errors", fieldErrors);
+    return ResponseEntity.badRequest().body(body);
+  }
 
-    @ExceptionHandler(DuplicateResourceException.class)
-    public ResponseEntity<Map<String, Object>> handleDuplicate(DuplicateResourceException ex) {
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(buildBody(HttpStatus.CONFLICT, ex.getMessage()));
-    }
+  @ExceptionHandler(DuplicateResourceException.class)
+  public ResponseEntity<Map<String, Object>> handleDuplicate(DuplicateResourceException ex) {
+    return ResponseEntity.status(HttpStatus.CONFLICT)
+        .body(buildBody(HttpStatus.CONFLICT, ex.getMessage()));
+  }
 
-    @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<Map<String, Object>> handleBadCredentials(BadCredentialsException ex) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(buildBody(HttpStatus.UNAUTHORIZED, "Invalid username or password"));
-    }
+  @ExceptionHandler(BadCredentialsException.class)
+  public ResponseEntity<Map<String, Object>> handleBadCredentials(BadCredentialsException ex) {
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+        .body(buildBody(HttpStatus.UNAUTHORIZED, "Invalid username or password"));
+  }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, Object>> handleGeneric(Exception ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(buildBody(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred"));
-    }
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<Map<String, Object>> handleGeneric(Exception ex) {
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .body(buildBody(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred"));
+  }
 
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<Map<String, Object>> handleNotFound(ResourceNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(buildBody(HttpStatus.NOT_FOUND, ex.getMessage()));
-    }
+  @ExceptionHandler(ResourceNotFoundException.class)
+  public ResponseEntity<Map<String, Object>> handleNotFound(ResourceNotFoundException ex) {
+    return ResponseEntity.status(HttpStatus.NOT_FOUND)
+        .body(buildBody(HttpStatus.NOT_FOUND, ex.getMessage()));
+  }
 
-    @ExceptionHandler(ForbiddenActionException.class)
-    public ResponseEntity<Map<String, Object>> handleForbidden(ForbiddenActionException ex) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                .body(buildBody(HttpStatus.FORBIDDEN, ex.getMessage()));
-    }
+  @ExceptionHandler(ForbiddenActionException.class)
+  public ResponseEntity<Map<String, Object>> handleForbidden(ForbiddenActionException ex) {
+    return ResponseEntity.status(HttpStatus.FORBIDDEN)
+        .body(buildBody(HttpStatus.FORBIDDEN, ex.getMessage()));
+  }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Map<String, Object>> handleIllegalArgument(IllegalArgumentException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(buildBody(HttpStatus.BAD_REQUEST, ex.getMessage()));
-    }
+  @ExceptionHandler(IllegalArgumentException.class)
+  public ResponseEntity<Map<String, Object>> handleIllegalArgument(IllegalArgumentException ex) {
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        .body(buildBody(HttpStatus.BAD_REQUEST, ex.getMessage()));
+  }
 
-    private Map<String, Object> buildBody(HttpStatus status, String message) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("timestamp", Instant.now());
-        body.put("status", status.value());
-        body.put("error", status.getReasonPhrase());
-        body.put("message", message);
-        return body;
-    }
+  private Map<String, Object> buildBody(HttpStatus status, String message) {
+    Map<String, Object> body = new HashMap<>();
+    body.put("timestamp", Instant.now());
+    body.put("status", status.value());
+    body.put("error", status.getReasonPhrase());
+    body.put("message", message);
+    return body;
+  }
 }

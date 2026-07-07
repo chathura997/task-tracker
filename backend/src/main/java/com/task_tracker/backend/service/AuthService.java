@@ -18,41 +18,43 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtUtil jwtUtil;
-    private final AuthenticationManager authenticationManager;
+  private final UserRepository userRepository;
+  private final PasswordEncoder passwordEncoder;
+  private final JwtUtil jwtUtil;
+  private final AuthenticationManager authenticationManager;
 
-    public AuthResponse register(RegisterRequest request) {
-        if (userRepository.existsByUsername(request.getUsername())) {
-            throw new DuplicateResourceException("Username already taken");
-        }
-        if (userRepository.existsByEmail(request.getEmail())) {
-            throw new DuplicateResourceException("Email already registered");
-        }
-
-        User user = User.builder()
-                .username(request.getUsername())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER)
-                .build();
-
-        userRepository.save(user);
-
-        String token = jwtUtil.generateToken(user.getUsername(), user.getRole().name());
-        return new AuthResponse(token, user.getUsername(), user.getRole().name());
+  public AuthResponse register(RegisterRequest request) {
+    if (userRepository.existsByUsername(request.getUsername())) {
+      throw new DuplicateResourceException("Username already taken");
+    }
+    if (userRepository.existsByEmail(request.getEmail())) {
+      throw new DuplicateResourceException("Email already registered");
     }
 
-    public AuthResponse login(LoginRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
-        );
+    User user =
+        User.builder()
+            .username(request.getUsername())
+            .email(request.getEmail())
+            .password(passwordEncoder.encode(request.getPassword()))
+            .role(Role.USER)
+            .build();
 
-        User user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    userRepository.save(user);
 
-        String token = jwtUtil.generateToken(user.getUsername(), user.getRole().name());
-        return new AuthResponse(token, user.getUsername(), user.getRole().name());
-    }
+    String token = jwtUtil.generateToken(user.getUsername(), user.getRole().name());
+    return new AuthResponse(token, user.getUsername(), user.getRole().name());
+  }
+
+  public AuthResponse login(LoginRequest request) {
+    authenticationManager.authenticate(
+        new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+
+    User user =
+        userRepository
+            .findByUsername(request.getUsername())
+            .orElseThrow(() -> new RuntimeException("User not found"));
+
+    String token = jwtUtil.generateToken(user.getUsername(), user.getRole().name());
+    return new AuthResponse(token, user.getUsername(), user.getRole().name());
+  }
 }
