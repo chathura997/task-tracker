@@ -1,3 +1,35 @@
 spring:
   application:
     name: backend
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/tasktracker
+    username: postgres
+    password: root
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+#    open-in-view: false
+
+#  flyway:
+#    enabled: false
+#    locations: classpath:db/migration
+#    baseline-on-migrate: true
+
+server:
+  port: 8080
+
+jwt:
+  secret: DdZvlP0ZkH5GOkhIkWAd7acxD87XYukjo9jss6x1vEL
+  expiration-ms: 86400000
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    com.task_tracker.backend: DEBUG
