@@ -15,12 +15,6 @@ spring:
     properties:
       hibernate:
         format_sql: true
-#    open-in-view: false
-
-#  flyway:
-#    enabled: false
-#    locations: classpath:db/migration
-#    baseline-on-migrate: true
 
 server:
   port: 8080
@@ -33,3 +27,7 @@ logging:
   level:
     org.springframework.security: DEBUG
     com.task_tracker.backend: DEBUG
+
+allowed:
+  origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173,http://localhost:3000}
+
