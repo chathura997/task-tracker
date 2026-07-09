@@ -105,7 +105,12 @@ export default function LoginPage() {
             </Avatar>
 
             <Box>
-              <Typography fontSize={30} fontWeight={700}>
+              <Typography
+                sx={{
+                  fontSize: 34,
+                  fontWeight: 700,
+                }}
+              >
                 Task Tracker
               </Typography>
 
