@@ -20,7 +20,6 @@ import {
   AssignmentTurnedIn,
   CalendarMonth,
   PersonOutlined,
-  PersonOutlineOutlined,
 } from "@mui/icons-material";
 
 const statusConfig = {
