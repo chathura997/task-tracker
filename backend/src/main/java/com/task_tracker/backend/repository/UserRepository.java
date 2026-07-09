@@ -1,5 +1,6 @@
 package com.task_tracker.backend.repository;
 
+import com.task_tracker.backend.entity.Role;
 import com.task_tracker.backend.entity.User;
 import java.util.Optional;
 import java.util.UUID;
@@ -9,6 +10,8 @@ public interface UserRepository extends JpaRepository<User, UUID> {
   Optional<User> findByUsername(String username);
 
   boolean existsByUsername(String username);
+
+  boolean existsByRole(Role role);
 
   boolean existsByEmail(String email);
 }
