@@ -13,22 +13,23 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class DataSeeder {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+  private final UserRepository userRepository;
+  private final PasswordEncoder passwordEncoder;
 
-    @Bean
-    public CommandLineRunner seedAdmin() {
-        return args -> {
-            if (!userRepository.existsByRole(Role.ADMIN)) {
-                User admin = User.builder()
-                        .username("admin")
-                        .email("admin@tasktracker.com")
-                        .password(passwordEncoder.encode("admin123"))
-                        .role(Role.ADMIN)
-                        .build();
-                userRepository.save(admin);
-                System.out.println("Seeded default admin user: admin / admin123");
-            }
-        };
-    }
+  @Bean
+  public CommandLineRunner seedAdmin() {
+    return args -> {
+      if (!userRepository.existsByRole(Role.ADMIN)) {
+        User admin =
+            User.builder()
+                .username("admin")
+                .email("admin@tasktracker.com")
+                .password(passwordEncoder.encode("admin123"))
+                .role(Role.ADMIN)
+                .build();
+        userRepository.save(admin);
+        System.out.println("Seeded default admin user: admin / admin123");
+      }
+    };
+  }
 }
