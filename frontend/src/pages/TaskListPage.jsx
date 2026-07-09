@@ -45,9 +45,10 @@ export default function TaskListPage() {
     }
   }, [page, statusFilter]);
 
-  useEffect(() => {
-    fetchTasks();
-  }, [fetchTasks]);
+useEffect(() => {
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- fetching data on mount/filter change is the correct use of this effect
+  fetchTasks();
+}, [fetchTasks]);
 
   const handleTaskEvent = useCallback(() => fetchTasks(), [fetchTasks]);
   useTaskSocket(handleTaskEvent);

@@ -1,25 +1,26 @@
-import { createContext, useContext, useState, useEffect } from "react";
-import * as authApi from "../api/auth";
+import { createContext, useContext, useState } from 'react';
+import * as authApi from '../api/auth';
 
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    const token = localStorage.getItem("token");
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem('user');
+    const token = localStorage.getItem('token');
     if (storedUser && token) {
-      setUser(JSON.parse(storedUser));
+      try {
+        return JSON.parse(storedUser);
+      } catch {
+        return null;
+      }
     }
-    setLoading(false);
-  }, []);
+    return null;
+  });
 
   const persistSession = (data) => {
     const { token, username, role } = data;
-    localStorage.setItem("token", token);
-    localStorage.setItem("user", JSON.stringify({ username, role }));
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify({ username, role }));
     setUser({ username, role });
   };
 
@@ -36,28 +37,28 @@ export function AuthProvider({ children }) {
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
     setUser(null);
   };
 
   const value = {
     user,
-    loading,
     login,
     register,
     logout,
     isAuthenticated: !!user,
-    isAdmin: user?.role === "ADMIN",
+    isAdmin: user?.role === 'ADMIN',
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
 }
