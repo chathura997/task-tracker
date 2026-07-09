@@ -5,7 +5,6 @@ import RegisterPage from "./pages/RegisterPage";
 import TaskListPage from "./pages/TaskListPage";
 import TaskDetailPage from "./pages/TaskDetailPage";
 
-
 function App() {
   return (
     <BrowserRouter>

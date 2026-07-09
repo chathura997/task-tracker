@@ -16,6 +16,12 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutlined";
 import * as taskApi from "../api/tasks";
 import TaskForm from "../components/TaskForm";
+import {
+  AssignmentTurnedIn,
+  CalendarMonth,
+  PersonOutlined,
+  PersonOutlineOutlined,
+} from "@mui/icons-material";
 
 const statusConfig = {
   TODO: { label: "To Do", color: "default" },
@@ -71,7 +77,7 @@ export default function TaskDetailPage() {
   const status = statusConfig[task.status] || statusConfig.TODO;
 
   return (
-    <Box sx={{ minHeight: "100vh", bgcolor: "background.default" }}>
+    <Box sx={{ minHeight: "100vh", bgcolor: "#F7F5EF" }}>
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Button
           startIcon={<ArrowBackIcon />}
@@ -82,8 +88,13 @@ export default function TaskDetailPage() {
         </Button>
 
         <Paper
-          elevation={0}
-          sx={{ p: 4, border: "1px solid", borderColor: "divider" }}
+          elevation={8}
+          sx={{
+            p: 5,
+            borderRadius: 5,
+            border: "1px solid #ECECEC",
+            background: "linear-gradient(to bottom,#ffffff,#fbfbfb)",
+          }}
         >
           {editing ? (
             <>
@@ -98,46 +109,158 @@ export default function TaskDetailPage() {
             </>
           ) : (
             <>
-              <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="flex-start"
-              >
-                <Typography variant="h4" sx={{ mb: 1 }}>
-                  {task.title}
-                </Typography>
-                <Chip label={status.label} color={status.color} />
-              </Stack>
-              {task.description && (
-                <Typography color="text.secondary" sx={{ mb: 3 }}>
-                  {task.description}
-                </Typography>
-              )}
-              <Stack spacing={1} sx={{ mb: 3 }}>
-                <Typography variant="body2">
-                  <strong>Due date:</strong> {task.dueDate || "None"}
-                </Typography>
-                <Typography variant="body2">
-                  <strong>Owner:</strong> {task.ownerUsername}
-                </Typography>
-              </Stack>
-              <Stack direction="row" spacing={1.5}>
-                <Button
-                  variant="contained"
-                  startIcon={<EditIcon />}
-                  onClick={() => setEditing(true)}
+              <>
+                <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
+                  <Box>
+                    <Typography
+                      sx={{
+                        fontWeight: 800,
+                        fontSize: { xs: 32, md: 42 },
+                        lineHeight: 1.1,
+                        mb: 1,
+                      }}
+                    >
+                      {task.title}
+                    </Typography>
+
+                    {/* <Typography color="text.secondary"sx={{ mt: 2 }}>Task Details</Typography> */}
+                  </Box>
+
+                  <Chip
+                    label={status.label}
+                    color={status.color}
+                    sx={{
+                      px: 1,
+                      py: 2.5,
+                      fontWeight: 700,
+                      fontSize: 15,
+                    }}
+                  />
+                </Stack>
+
+                {task.description && (
+                  <Paper
+                    elevation={0}
+                    sx={{
+                      mt: 4,
+                      mb: 2,
+                      p: 3,
+                      bgcolor: "#F7F8FA",
+                      borderRadius: 3,
+                    }}
+                  >
+                    <Typography color="text.secondary">
+                      {task.description}
+                    </Typography>
+                  </Paper>
+                )}
+
+                <Stack
+                  direction={{ xs: "column", md: "row" }}
+                  spacing={2}
+                  mt={4}
                 >
-                  Edit
-                </Button>
-                <Button
-                  variant="outlined"
-                  color="error"
-                  startIcon={<DeleteOutlineIcon />}
-                  onClick={handleDelete}
-                >
-                  Delete
-                </Button>
-              </Stack>
+                  <Paper
+                    elevation={0}
+                    sx={{
+                      flex: 1,
+                      p: 3,
+                      borderRadius: 3,
+                      border: "1px solid #ECECEC",
+                    }}
+                  >
+                    <Stack direction="row" spacing={2}>
+                      <CalendarMonth color="primary" />
+
+                      <Box>
+                        <Typography variant="body2" color="text.secondary">
+                          Due Date
+                        </Typography>
+
+                        <Typography fontWeight={700}>
+                          {task.dueDate || "No due date"}
+                        </Typography>
+                      </Box>
+                    </Stack>
+                  </Paper>
+
+                  <Paper
+                    elevation={0}
+                    sx={{
+                      flex: 1,
+                      p: 3,
+                      borderRadius: 3,
+                      border: "1px solid #ECECEC",
+                    }}
+                  >
+                    <Stack direction="row" spacing={2}>
+                      <PersonOutlined color="primary" />
+
+                      <Box>
+                        <Typography variant="body2" color="text.secondary">
+                          Owner
+                        </Typography>
+
+                        <Typography fontWeight={700}>
+                          {task.ownerUsername}
+                        </Typography>
+                      </Box>
+                    </Stack>
+                  </Paper>
+
+                  <Paper
+                    elevation={0}
+                    sx={{
+                      flex: 1,
+                      p: 3,
+                      borderRadius: 3,
+                      border: "1px solid #ECECEC",
+                    }}
+                  >
+                    <Stack direction="row" spacing={2}>
+                      <AssignmentTurnedIn color="success" />
+
+                      <Box>
+                        <Typography variant="body2" color="text.secondary">
+                          Status
+                        </Typography>
+
+                        <Typography fontWeight={700}>{status.label}</Typography>
+                      </Box>
+                    </Stack>
+                  </Paper>
+                </Stack>
+
+                <Stack direction="row" spacing={2} sx={{ mt: 4 }}>
+                  <Button
+                    variant="contained"
+                    startIcon={<EditIcon />}
+                    onClick={() => setEditing(true)}
+                    sx={{
+                      px: 4,
+                      py: 1.4,
+                      borderRadius: 3,
+                      bgcolor: "#184D43",
+                    }}
+                  >
+                    Edit Task
+                  </Button>
+
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    startIcon={<DeleteOutlineIcon />}
+                    onClick={handleDelete}
+                    sx={{
+                      px: 4,
+                      py: 1.4,
+                      borderRadius: 3,
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </Stack>
+              </>
             </>
           )}
         </Paper>

@@ -45,10 +45,10 @@ export default function TaskListPage() {
     }
   }, [page, statusFilter]);
 
-useEffect(() => {
-  // eslint-disable-next-line react-hooks/set-state-in-effect -- fetching data on mount/filter change is the correct use of this effect
-  fetchTasks();
-}, [fetchTasks]);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- fetching data on mount/filter change is the correct use of this effect
+    fetchTasks();
+  }, [fetchTasks]);
 
   const handleTaskEvent = useCallback(() => fetchTasks(), [fetchTasks]);
   useTaskSocket(handleTaskEvent);
@@ -169,7 +169,7 @@ useEffect(() => {
               borderRadius: 3,
             }}
           >
-            <MenuItem value="">All Statuses</MenuItem>
+            <MenuItem value="">All Tasks</MenuItem>
             <MenuItem value="TODO">To Do</MenuItem>
             <MenuItem value="IN_PROGRESS">In Progress</MenuItem>
             <MenuItem value="DONE">Done</MenuItem>
